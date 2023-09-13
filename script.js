@@ -720,7 +720,7 @@ function gridTest(){
     X += 1;
   }
   X = 4.71;
-  Y = -0.02;
+  Y = 0;
   for (var j = 0; j < 21; j++) {
     line((X)*Side, (Y)*Side, 14.71*Side,(Y)*Side);
     Y += 1;
