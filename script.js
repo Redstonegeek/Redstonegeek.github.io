@@ -499,7 +499,7 @@ function edgeCollision(){
     }
    tIndex += 1;
   }
-  while (edgeIndex < 200){
+  while (edgeIndex < 220){
     if (board[edgeIndex] > 0){
       if (listContains(M,edgeIndex)){
       append(collides,1);
