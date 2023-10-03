@@ -1,1 +1,1 @@
-My attempt at making from scratch
+My attempt at making sirtet from scratch
