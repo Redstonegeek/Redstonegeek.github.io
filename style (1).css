@@ -1,0 +1,29 @@
+html {
+#swapToKeybinds:active,    
+  .active{
+  border-style:inset;
+  }
+
+  .keyBinds {
+    float:down;
+  }
+  .SDF #sdfValue{
+    float:right;
+  }
+  .settings input{
+  float:right;
+}
+  .DAS #dasValue {
+    float:right;
+  }
+  .ARR #arrValue{
+    float:right;
+  }
+  height: 100%;
+  width: 100%;
+  body {
+ margin: 0 !important;
+ padding: 0 !important;
+}
+  
+}

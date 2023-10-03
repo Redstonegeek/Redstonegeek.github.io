@@ -1,15 +1,195 @@
-<!DOCTYPE html>
 <html>
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Bad HTMLtris</title>
+  <title>Bad HTMLTris</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  <canvas id="myCanvas" width="300" height="0"></canvas>
+  <style>
+    .allClear{
+      animation: allClear linear 10000ms;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+    }
+    @keyframes allClear{
+    0%{
+    transform:scale(1);
+    opacity:1;
+    }
+    2%{
+      transform:scale(40) rotate(360deg)
+    }
+      10%{
+        transform:scale(40) rotate(360deg)
+      }
+      30%{
+        transform:scale(31.5) rotate(360deg);
+        opacity:1;
+      }
+      75%{
+        opacity:0;
+        visibility: hidden;
+      }
+     90%{
+       transform: scale(5) rotate(360deg);
+       visibility: hidden;
+       opacity:0;
+     } 
+      100%{
+        transform: scale(1);
+        visibility: hidden;
+        opacity:0;
+      }
+    }
+    input[type=number]{
+      margin-left: 3px;
+      margin-right: 3px;
+      border-color: white;
+      background-color: black;
+    }
+    * {
+      font-family:Arial;
+      color:rgb(255,255,255)
+    }
+    button{
+      border-color: white;
+      background-color: rgb(0,0,0)
+    }
+      body{
+    background-color: rgb(0,0,0)
+  }
+  </style>
+  <canvas id="myCanvas" width="400" height="0"></canvas>
+  <div class='keybinds' id = 'keybinds' style="display:none;position:absolute;top:480px;left:100px">
+    <p1>LEFT:</p1>
+    <button class='keybindButton'id='left'onclick="startInputPoll(1)" style="margin-left:50px;border-width: 2px;background-color: gray;color: black;">←</button>
+    <p1>CW:</p1>
+        <button class='keybindButton'id='CW'onclick="startInputPoll(4)" style="margin-left:11.5px;border-width: 2px;background-color: gray;color: black;">↑</button><br>
+    <p2>RIGHT:</p2>
+    <button id='right'onclick="startInputPoll(2)" style="width:29px;margin-left: 39.5px;margin-right:auto;border-width: 2px;background-color: gray;color: black;">→</button>
+    <p2>CCW:</p2>
+        <button id='CCW'onclick="startInputPoll(5)" style="width:29px;border-width: 2px;background-color: gray;color: black;">Z</button><br>
+
+  
+    <p3>SOFTDROP:</p3>
+    <button id='down'onclick="startInputPoll(3)" style="width:29px;margin-left:-2px;margin-right:auto;border-width: 2px;background-color: gray;color: black;">↓</button>
+    <p3>180:</p3>
+     <button id='180'onclick="startInputPoll(6)" style="width:29px;margin-left:11.5px;border-width: 2px;background-color: gray;color: black;">A</button><br>
+    <p1 style="font-size:15">HARDDROP:</p1>
+    <button id='hd'onclick="startInputPoll(9)" style="width:29px;margin-left:2px;margin-right:auto;border-width: 2px;background-color: gray;color: black;">SP</button>
+    <p1>RESET:</p1>
+        <button id='reset'onclick="startInputPoll(7)" style="width:29px;margin-left:0px;margin-right:auto;border-width: 2px;background-color: gray;color: black;">R</button><br>
+    <p1>EXIT:</p1>
+        <button id='exit'onclick="startInputPoll(8)" style="width:40px;margin-left:47px;margin-right:auto;border-width: 2px;background-color: gray;color: black;">ESC</button>
+    <p1>HOLD:</p1>
+    <button id='hold'onclick="startInputPoll(10)" style="width:29px;margin-left:-2px;margin-right:auto;border-width: 2px;background-color: gray;color: black;">C</button>
+  </div>
+  <p1  id='allClearText' style="opacity:0;color:orange;scale:0.1;position:absolute;top:200px;left:170px;">All Clear</p1>
+  <div class='swapSettingButtons' style="display:none" id = 'swapSettingButtons'>
+  <button style='display:block;position:absolute;top:450;left:100' id = 'swapToHandling' onclick='swapToHandling();holdHandling()'>Handling</button>
+     <button style='position:absolute;top:450;left:170' id = 'swapToKeybinds' onclick='swapToKeybinds();holdKeybind()'>Keybinds</button>
+  </div>
+  <div class='settings' id='settings'style = "position:absolute; left:101px; top:420px;">
+           <button onclick="myFunction()">Settings</button>
+ 
+      </div>
+    <div class='ARR HS' id='ARRDiv' style='display:none;position:absolute;left:98px;top:505px'>
+        <p2 id = 'ARRText' >ARR(In Frames):</p2>
+      <input style="width:5em" type='number' id = 'arrValue' name = 'arrValue' size = '10'/>
+  </div>
+    <div class='SDF HS' id='SDFDiv' style='display:none;position:absolute;left:98px;top:530px'>
+      <p3 id='SdfText' >SDF(In Frames):</p3>
+              <input style="width:5em;" type='number' id = 'sdfValue' name = 'sdfValue' size = '10'/>
+    </div>
+  <div class='DAS HS' id='DasDiv' style = "display:none;position:absolute; left:98px; top:480px"/>
+    <p1 id='DasText'>DAS(In MS):</p1>
+        <input style="width:5em;" type='number' id = 'dasValue' name = 'dasValue' value='110' size = '10'/>
+  </div>
+<div class = 'apply' id = 'apply' style = 'position:absolute;left:230px;top:420px'>
+  <button  onclick= 'setSDF();setARR();setDAS();myFunction()' id = 'submit' style = 'margin-right:0px;display:none;' onclick='Submit'>Apply</button>
+  <button onclick='myFunction()'id='exitSettings'style='margin-left:-4px;display:none'>X</button>
+</div>
+<script>
+  function swapToKeybinds(){
+    let keybindInputs = document.getElementById('keybinds')
+    let handlingSettings = document.getElementsByClassName('HS')
+        keybindInputs.style.display = 'block'
+ for (var x = 0; x < handlingSettings.length;x++){
+
+    handlingSettings[x].style.display = 'none'
+ }
+  }
+  function swapToHandling(){
+    //HS shorthand for handlingSetting
+    let handlingSettings = document.getElementsByClassName('HS')
+    let keybindInputs = document.getElementById('keybinds')
+    keybindInputs.style.display = 'none'
+     for (var x = 0; x < handlingSettings.length;x++){
+    handlingSettings[x].style.display = 'block'
+ }
+  }
+  function holdHandling(){
+    let handlingButton = document.getElementById('swapToHandling')
+    let keybindButton = document.getElementById('swapToKeybinds')
+    if (!handlingButton.classList.contains('active')){
+      handlingButton.classList.add('active')
+    }
+    if (keybindButton.classList.contains('active')){
+    keybindButton.classList.toggle('active')
+    }
+  }
+  function holdKeybind(){
+    let keybindButton = document.getElementById('swapToKeybinds')
+    let handlingButton = document.getElementById('swapToHandling')
+    if (!keybindButton.classList.contains('active')){
+    keybindButton.classList.add('active')
+    }
+    if (handlingButton.classList.contains('active')){
+    handlingButton.classList.toggle('active')
+    }
+  }
+  function myFunction(){
+    let X = document.getElementById('exitSettings')
+     let handlingButton = document.getElementById('swapToHandling')
+    let keybindButton = document.getElementById('swapToKeybinds')
+    let SSBDiv = document.getElementById('swapSettingButtons')
+    let handlingSettings = document.getElementsByClassName('HS')
+    let submitBox = document.getElementById('submit')
+    let DASDiv = document.getElementById('DasDiv')
+    let keybinds = document.getElementById('keybinds')
+  
+    console.log(keybindButton.classList)
+    if (DASDiv.style.display == 'none' && keybinds.style.display == 'none'){
+            SSBDiv.style.display = 'block'
+      X.style.display = 'inline'
+      submitBox.style.display = 'inline'
+      if (keybindButton.classList.contains('active')){
+        keybinds.style.display = 'block'
+      }else{
+        if (!handlingButton.classList.contains('active')){
+          handlingButton.classList.add('active')
+        }
+        for (var x = 0; x < handlingSettings.length;x++){
+    handlingSettings[x].style.display = 'block'
+ }
+    
+      }
+    
+    }else{
+      keybinds.style.display = 'none'
+      SSBDiv.style.display = 'none'
+      for (var x = 0; x < handlingSettings.length;x++){
+    handlingSettings[x].style.display = 'none'
+ }
+      submitBox.style.display = 'none'
+      X.style.display = 'none'
+    }
+   
+  }
+</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/planck-js/0.2.7/planck.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
 <script src="script.js"></script>
